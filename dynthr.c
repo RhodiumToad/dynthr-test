@@ -2,7 +2,6 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <stddef.h>
 #include <stdarg.h>
 #include <string.h>
 #include <unistd.h>
@@ -40,19 +39,6 @@ static void die(const char *str, ...)
 	_exit(1);
 }
 
-static void thrash_memory(int id)
-{
-	char *ptrs[20];
-	for (int n = 0; n < 5; ++n)
-	{
-		for (int i = 0; i < 20; ++i)
-			ptrs[i] = malloc((random() & 0x7ff) << ((random() & 7) + 3));
-		for (int i = 0; i < 20; ++i)
-			free(ptrs[i]);
-		say("%d: iteration %d", id, n);
-	}
-}
-
 typedef void (modfunc_t)(int op);
 	
 #ifdef MODULE
@@ -62,7 +48,7 @@ static void *mod_thread(void *ptr)
 	char *volatile dummy;
 	dummy = malloc(500);
 	say("thread running");
-	thrash_memory(1);
+	dummy = malloc(500);
 	return NULL;
 }
 
@@ -100,6 +86,7 @@ void mod_main(int op)
 
 int main()
 {
+	char *volatile dummy;
 	alarm(3);
 	say("starting");
 	void *mod_handle = dlopen("./dynthr_mod.so", RTLD_LOCAL);
@@ -112,7 +99,7 @@ int main()
 	say("invoking module");
 	modfunc_t *func = (modfunc_t *) rawfunc;
 	func(1);
-	thrash_memory(0);
+	dummy = malloc(500);
 	say("done; invoking module stop");
 	func(0);
 	say("stopped successfully");
