@@ -89,6 +89,11 @@ int main()
 	char *volatile dummy;
 	alarm(3);
 	say("starting");
+#ifdef PRELOAD_LIBTHR
+	void *thr_handle = dlopen("libthr.so", RTLD_GLOBAL|RTLD_NOW);
+	if (!thr_handle)
+		die("failed to open libthr.so: %s", dlerror());
+#endif
 	void *mod_handle = dlopen("./dynthr_mod.so", RTLD_LOCAL);
 	if (!mod_handle)
 		die("failed to open dynthr_mod.so: %s", dlerror());
