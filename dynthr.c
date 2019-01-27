@@ -1,4 +1,13 @@
-/* -*- C -*- */
+/*
+ * Copyright (C) 2019 Andrew Gierth
+ * SPDX-License-Identifier: BSD-2-Clause
+ *
+ * Though this file is initially distributed under the 2-clause BSD license,
+ * the author grants permission for its redistribution under alternative
+ * licenses as set forth at <https://rhodiumtoad.github.io/RELICENSE.txt>.
+ * This paragraph and the RELICENSE.txt file are not part of the license and
+ * may be omitted in redistributions.
+ */
 
 #include <stdio.h>
 #include <stdlib.h>
